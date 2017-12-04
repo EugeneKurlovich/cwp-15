@@ -9,10 +9,12 @@ app.use(bodyParser.json());
 const fleets_controller = require('./route/apiFleets');
 const vehicles_controller = require('./route/apiVehicles');
 const motions_controller = require('./route/apiMotions');
+const auth_controller = require('./route/auth');
 
 app.use('/api/fleets', fleets_controller);
 app.use('/api/vehicles', vehicles_controller);
 app.use('/api/motions', motions_controller);
+app.use('/api/auth',auth_controller);
 
 app.listen(3000, () => {
   WorkWork();

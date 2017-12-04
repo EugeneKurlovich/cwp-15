@@ -2,31 +2,30 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+var bodyParser = require('body-parser');
+const Sequelize = require('sequelize');
+const config = require('../config.json');
+const db = require('../models')(Sequelize, config);
+const app = express();
+app.use(bodyParser.json()); 
 
 
-router.post('/api/auth/register', async function (req, res, next) {
+router.post('/register', async function (req, res, next) {
     req.body.password = bcrypt.hashSync(req.body.password);
-    await dbWorker.create(req.body).catch((err) => {
-        console.log("Duplicate email");
-        res.status(409).end("Registration error");
-        return;
-    });
-    res.status(201).end();
+    let result = await db.managers.create(req.body);
+
+    if (result !== undefined)
+    {
+        res.send(JSON.stringify(result));
+    }
+    else
+    {
+        res.end('ERROR CREATE');
+    }
 });
 
-router.post('/api/auth/login', async function (req, res, next) {
-    let result = await dbWorker.login(req.body.email, req.body.password);
+router.post('/login', async function (req, res, next) {
 
-    if (result && result.status) {
-        res.end(jwt.sign({
-            id: result.id,
-            email: req.body.email
-        }, "secret", {expiresIn: 60 * 5}));
-        return;
-    }
-    else {
-        res.status(401).end("Login error");
-    }
 });
 
 module.exports = router;

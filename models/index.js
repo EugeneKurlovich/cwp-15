@@ -2,6 +2,7 @@ const Fleets = require('./fleets');
 const Vehicles = require('./vehicles');
 const Motions = require('./motions');
 const config = require('../config.json');
+const Managers = require('./managers');
 
 module.exports = (Sequelize, config) => {
     const sequelize = new Sequelize(config.db, config.login, config.password, {
@@ -22,16 +23,16 @@ module.exports = (Sequelize, config) => {
     const fleets = Fleets(Sequelize, sequelize);
     const vehicles = Vehicles(Sequelize, sequelize);
     const motions = Motions(Sequelize, sequelize);
-    const auth = Managers(Sequelize, sequelize);
+    const managers = Managers(Sequelize, sequelize);
 
     fleets.hasMany(vehicles, {onDelete: 'cascade', hooks: true, truncate: true});
     vehicles.hasMany(motions, {onDelete: 'cascade', hooks: true, truncate: true});
-    fleets.hasOne(auth);
+    fleets.hasOne(managers);
     return {
         fleets,
         vehicles,
         motions,
-        auth,
+        managers,
 
         sequelize: sequelize,
         Sequelize: Sequelize,
