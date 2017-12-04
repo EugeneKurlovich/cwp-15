@@ -22,14 +22,16 @@ module.exports = (Sequelize, config) => {
     const fleets = Fleets(Sequelize, sequelize);
     const vehicles = Vehicles(Sequelize, sequelize);
     const motions = Motions(Sequelize, sequelize);
+    const auth = Managers(Sequelize, sequelize);
 
     fleets.hasMany(vehicles, {onDelete: 'cascade', hooks: true, truncate: true});
     vehicles.hasMany(motions, {onDelete: 'cascade', hooks: true, truncate: true});
-
+    fleets.hasOne(auth);
     return {
         fleets,
         vehicles,
         motions,
+        auth,
 
         sequelize: sequelize,
         Sequelize: Sequelize,
