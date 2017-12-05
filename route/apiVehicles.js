@@ -96,7 +96,16 @@ router.post('/read',async function(req,res,next){
 });
 
 router.post('/create',async function(req,res,next){
-    let result = await db.vehicles.create(req.body);
+    let result;
+    if (req.manager.super)
+    {
+     result = await db.vehicles.create(req.body);
+    }
+    else
+    {
+     req.body.fleetId = req.manager.fleetId;
+     result = await db.vehicles.create(req.body);
+    }
 
     if (result !== undefined)
     {
