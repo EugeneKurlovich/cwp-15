@@ -17,7 +17,7 @@ router.post('/milage', async function (req, res, next) {
         id:req.body.id
     }
     });
-
+    if (req.manager.super || (vehicle && vehicle.fleetId == req.manager.fleetId)) {
     if (vehicle) {
         let coords = await db.motions.findAll({
             where:{
@@ -38,14 +38,19 @@ router.post('/milage', async function (req, res, next) {
         }
             
         else {
-            let distance = geolib.getDistance(coordss);
+            let distance = geolib.getPathLength(coordss);
             res.send(JSON.stringify(distance));
         }
     }
     else
     {
         res.send("ERROR 400");
-    }      
+    }  
+}
+else
+{
+    res.send("ERROR");
+}    
 });
 
 router.post('/readAll',async function(req,res,next){
