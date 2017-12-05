@@ -126,7 +126,7 @@ router.post('/update',async function(req,res,next){
             }
         });
 
-        if (req.manager.super || (vehicle && vehicle.fleetId === req.manager.fleetId ))
+        if (req.manager.super || (result && result.fleetId === req.manager.fleetId ))
         {
             if (result !== undefined)
             {
@@ -137,6 +137,7 @@ router.post('/update',async function(req,res,next){
                 res.end('ERROR 404');
             }
         }
+        res.send("ERROR ");
 });
 
 router.post('/delete',async function(req,res,next){
@@ -145,7 +146,7 @@ router.post('/delete',async function(req,res,next){
                 id: req.body.id
             }
     });
-
+    if (req.manager.super || (result && result.fleetId == req.manager.fleetId)) {
     if (result !== undefined)
     {
         res.send(JSON.stringify(result));
@@ -154,4 +155,6 @@ router.post('/delete',async function(req,res,next){
     {
         res.end('ERROR 404');
     }
+}
+res.send("ERROR ");
 });
