@@ -10,7 +10,8 @@ app.use(bodyParser.json());
 
 
 router.get('/readAll',async function(req,res,next){
-
+    if (req.manager.super)
+    {
 let result = await db.fleets.findAll();
     if (result.length !== 0)
     {
@@ -20,11 +21,25 @@ let result = await db.fleets.findAll();
     {
         res.end('ERROR');
     }
+}
+    else
+    {
+        res.send("ERROR  403");
+    }
 });
 
 router.post('/read',async function(req,res,next){
     console.log(req.body.id);
-let result = await db.fleets.findById(req.body.id);
+    let result;
+    if (req.manager.super)
+    {
+         result = await db.fleets.findById(req.body.id);
+    }
+    else
+    {
+        console.log("rmf " + req.manager.fleetId);
+        result = await db.fleets.findById(req.manager.fleetId);
+    }
 
   if (result !== undefined)
     {
