@@ -126,14 +126,17 @@ router.post('/update',async function(req,res,next){
             }
         });
 
-    if (result !== undefined)
-    {
-        res.send(JSON.stringify(result));
-    }
-    else
-    {
-        res.end('ERROR 404');
-    }
+        if (req.manager.super || (vehicle && vehicle.fleetId === req.manager.fleetId ))
+        {
+            if (result !== undefined)
+            {
+                res.send(JSON.stringify(result));
+            }
+            else
+            {
+                res.end('ERROR 404');
+            }
+        }
 });
 
 router.post('/delete',async function(req,res,next){
