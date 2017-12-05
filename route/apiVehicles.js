@@ -73,7 +73,11 @@ router.post('/readAll',async function(req,res,next){
     }
 });
 
+
+
+
 router.post('/read',async function(req,res,next){
+
     let result = await db.vehicles.findAll({
         where:
         {
@@ -81,10 +85,10 @@ router.post('/read',async function(req,res,next){
         }
     });
 
-    if (result.length !== 0)
-    {
-        res.send(JSON.stringify(result));
-    }
+        if (req.manager.super || (result && result.fleetId == req.manager.fleetId))
+        {
+            res.send(JSON.stringify(result));
+        }
     else
     {
         res.end('ERROR 404');
