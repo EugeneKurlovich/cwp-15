@@ -49,14 +49,21 @@ router.post('/milage', async function (req, res, next) {
 });
 
 router.post('/readAll',async function(req,res,next){
-    let result = await db.vehicles.findAll({
+    let result;
+    if (req.manager.super)
+    {
+        result = await db.vehicles.findAll();
+    }
+    else
+    {
+    result = await db.vehicles.findAll({
         where:
         {
-            fleetId : req.body.fleetId
+            fleetId : req.manager.fleetId
         }
     });
-
-    if (result.length !== 0)
+    }
+    if (result !== undefined)
     {
         res.send(JSON.stringify(result));
     }
