@@ -52,6 +52,9 @@ router.post('/read',async function(req,res,next){
 });
 
 router.post('/create',async function(req,res,next){
+
+    if (req.manager.super)
+    {
 let result = await db.fleets.create(req.body);
 
   if (result !== undefined)
@@ -62,9 +65,16 @@ let result = await db.fleets.create(req.body);
     {
         res.end('ERROR CREATE');
     }
+    }
+    else
+    {
+        res.end("ERROR 403");
+    }
 });
 
 router.post('/update',async function(req,res,next){
+    if (req.manager.super)
+    {
     let result = await db.fleets.update(
         req.body,
         {
@@ -80,11 +90,17 @@ router.post('/update',async function(req,res,next){
         else
         {
             res.end('ERROR 400');
-        }  
+        } 
+    } 
+    else
+    {
+        res.end("ERROR 403");
+    }
     });
 
     router.post('/delete',async function(req,res,next){
-
+        if (req.manager.super)
+        {
         if (req.body.id !== undefined)
             {
       let result = await db.fleets.destroy({
@@ -106,6 +122,11 @@ router.post('/update',async function(req,res,next){
         {
             res.end("VALIDATION ERROR");
         } 
+    }
+        else
+        {
+            res.end("ERROR 403");
+        }
         });
 
 module.exports = router;
