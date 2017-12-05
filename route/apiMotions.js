@@ -10,6 +10,9 @@ app.use(bodyParser.json());
 module.exports = router;
 
 router.post('/create',async function(req,res,next){
+    let vehicle = await vehicles.findById(req.body.vehicleId);
+    if(req.manager.super || (vehicle && vehicle.fleetId == req.manager.fleetId))
+    {
     let result = await db.motions.create(req.body);
     
         if (result !== undefined)
@@ -20,4 +23,9 @@ router.post('/create',async function(req,res,next){
         {
             res.end('ERROR CREATE');
         }
+    }
+    else
+    {
+        res.end("ERROR");
+    }
 });
